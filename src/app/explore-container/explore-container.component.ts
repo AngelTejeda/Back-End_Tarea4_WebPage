@@ -6,10 +6,26 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./explore-container.component.scss'],
 })
 export class ExploreContainerComponent implements OnInit {
-  @Input() name: string;
+  @Input() name: string; 
+
+  array=[
+    {
+      name: "Sofía",
+      id: 1
+    },
+    {
+      name:"Angel",
+      id: 2
+    }
+  ]
+
 
   constructor() { }
 
   ngOnInit() {}
+
+  deleteElement(){
+    alert("Hola");
+  }
 
 }
