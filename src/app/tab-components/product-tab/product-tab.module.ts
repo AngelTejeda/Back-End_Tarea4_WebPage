@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProductTabPageRoutingModule } from './product-tab-routing.module';
 
 import { ProductTabPage } from './product-tab.page';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { ExploreContainerComponentModule } from '../../explore-container/explore-container.module';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
