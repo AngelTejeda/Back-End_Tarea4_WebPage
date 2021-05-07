@@ -10,36 +10,49 @@ import { IResponse } from '../models/api-response-model';
 })
 export class ExploreContainerComponent implements OnInit {
   @Input() name: string; 
-
-  response: IResponse<IEmployee> = {
-    previousPage: null,
-    nextPage: 1,
-    responseList: []
-  }
-  currentPage: number = 1;
+  
+  employees: IEmployee[] = []
+  nextPage?: number = 1;
+  previousPage?: number = null;
 
   constructor(private http: HttpProviderService) {
     
   }
 
   ngOnInit() {
-    this.nextPage();
+    this.getNextPage();
   }
 
-  deleteElement(){
-    alert("Hola");
+  deleteElement(id: number){
+    this.http.deleteRequest("Employee", `${id}`)
+      .subscribe(
+        (data) => {
+          let removedElement = this.employees.find(e => e.id == id);
+          let index = this.employees.indexOf(removedElement); 
+          this.employees.splice(index, 1);
+        },
+        (error) => {console.log(error);}
+      );
+
+    
   }
 
   getRequest(page: number) {
     this.http.getRequest<IResponse<IEmployee>>("Employee", `some/${page}`)
       .subscribe(
         (data) => {
-          this.response = data;
+          
+          if(!data.nextPage && !data.previousPage) {
+            this.nextPage = 1;
+            this.previousPage = null;
+            this.employees = []
+          }
 
-          if(data.nextPage == null && data.previousPage == null)
-            this.currentPage = 1;
-          else
-            this.currentPage = page;
+          else {
+            this.nextPage = data.nextPage;
+            this.previousPage = data.previousPage;
+            this.employees = data.responseList;
+          }
           
           console.log(data);
         },
@@ -47,12 +60,12 @@ export class ExploreContainerComponent implements OnInit {
       );
   }
 
-  previousPage() {
-    this.getRequest(this.response.previousPage); 
+  getPreviousPage() {
+    this.getRequest(this.previousPage); 
   }
 
-  nextPage() {
-    this.getRequest(this.response.nextPage);
+  getNextPage() {
+    this.getRequest(this.nextPage);
   }
   
 }
