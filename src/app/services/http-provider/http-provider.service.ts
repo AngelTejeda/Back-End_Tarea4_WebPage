@@ -23,16 +23,19 @@ export class HttpProviderService {
     return this.http.get<T>(url);
   }
 
-  postRequest(component: string, endpoint: string = "", bodyParams?: HttpParams) {
-    let url = this.baseUrl + component + "/" + endpoint;
+  postRequest(component: string, bodyParams: any) {
+    let url = this.baseUrl + component;
 
-    return this.http.post(url, {params: bodyParams});
+    let headers = new HttpHeaders();
+    headers.append("Content-Type", "text/html");
+
+    return this.http.post(url, bodyParams, {responseType: 'text'});
   }
 
-  putRequest(component: string, endpoint: string = "", bodyParams?: HttpParams) {
+  putRequest(component: string, endpoint: string = "", bodyParams: any) {
     let url = this.baseUrl + component + "/" + endpoint;
 
-    return this.http.put(url, {params: bodyParams});
+    return this.http.put<string>(url, bodyParams);
   }
 
   deleteRequest(component: string, endpoint: string = "") {
