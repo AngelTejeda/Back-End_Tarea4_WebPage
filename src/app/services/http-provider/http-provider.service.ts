@@ -17,10 +17,10 @@ export class HttpProviderService {
 
   constructor(private http: HttpClient) { }
 
-  getRequest<T>(component: string, endpoint: string = "", bodyParams?: HttpParams) {
+  getRequest<T>(component: string, endpoint: string = "") {
     let url = this.baseUrl + component + "/" + endpoint;
     
-    return this.http.get<T>(url, {params: bodyParams});
+    return this.http.get<T>(url);
   }
 
   postRequest(component: string, endpoint: string = "", bodyParams?: HttpParams) {
@@ -35,9 +35,9 @@ export class HttpProviderService {
     return this.http.put(url, {params: bodyParams});
   }
 
-  deleteRequest(component: string, endpoint: string = "", bodyParams?: HttpParams) {
+  deleteRequest(component: string, endpoint: string = "") {
     let url = this.baseUrl + component + "/" + endpoint;
 
-    return this.http.delete(url, {params: bodyParams});
+    return this.http.delete(url);
   }
 }
