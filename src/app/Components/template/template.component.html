@@ -32,7 +32,9 @@
       <!-- If there is information -->
       <ion-list *ngIf="loaded">
         
-        <app-employee-info (deleteEvent)="deleteElement($event)" (updateEvent)="updateElement($event)" *ngFor="let employee of employees" [employee]="employee"></app-employee-info>
+        <div *ngFor="let element of elemnts">
+          <ng-content></ng-content>
+        </div>
   
         <ion-button *ngIf="previousPage" (click)="getPreviousPage()">Previous Page</ion-button>
         <ion-button *ngIf="nextPage" (click)="getNextPage()">Next Page</ion-button>
@@ -46,6 +48,4 @@
     </div>
     
   </div>
-
-
 </div>
