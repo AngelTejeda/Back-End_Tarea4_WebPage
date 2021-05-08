@@ -7,12 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class HttpProviderService {
   
-  baseUrl : string = "https://localhost:44310/api/"
-  corsHeaders : HttpHeaders = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  });
+  port: number = 44310;
+  baseUrl : string = `https://localhost:${this.port}/api/`
 
 
   constructor(private http: HttpClient) { }
