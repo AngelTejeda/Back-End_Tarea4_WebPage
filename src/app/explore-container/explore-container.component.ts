@@ -69,6 +69,8 @@ export class ExploreContainerComponent implements OnInit {
           if(this.employees.length == 1) {
             if(this.previousPage)
               this.getPreviousPage();
+            else if(this.nextPage)
+              this.getNextPage();
             else
               this.loaded = false;
           }
@@ -104,6 +106,8 @@ export class ExploreContainerComponent implements OnInit {
 
           this.error = true;
           this.loaded = false;
+
+          console.log(error);
         }
       )
       .add(() => {
