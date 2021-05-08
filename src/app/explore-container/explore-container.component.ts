@@ -84,7 +84,7 @@ export class ExploreContainerComponent implements OnInit {
   getRequest(page: number) {
     this.loading = true;
 
-    this.http.getRequest<IResponse<IEmployee>>("Employee", `some/${page}`)
+    this.http.getRequest<IResponse<IEmployee>>("Employee", `pages/${page}`)
       .subscribe(
         (data) => {
           //Info loading
