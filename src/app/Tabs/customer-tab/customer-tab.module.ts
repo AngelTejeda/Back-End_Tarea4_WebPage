@@ -8,13 +8,16 @@ import { ExploreContainerComponentModule } from '../../explore-container/explore
 
 import { CustomerTabPageRoutingModule } from './customer-tab-routing.module';
 
+import { ComponentsModule } from '../../Components/components.module';
+
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    CustomerTabPageRoutingModule
+    CustomerTabPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [CustomerTab]
 })

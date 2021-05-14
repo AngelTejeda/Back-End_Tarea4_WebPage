@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark barra">
+    <ion-title>
+      {{name}} {{familyName}}
+    </ion-title>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" (click)="salir()">
+      <ion-icon name="close"></ion-icon>
+    </ion-button>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+    <ion-label color="primary" position="stacked">ID</ion-label>
+    <ion-input type="number" [ngModel]="id" readonly></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="stacked">Nombre</ion-label>
+    <ion-input type="string" [ngModel]="name" [readonly]="!edit"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="stacked">Apellido</ion-label>
+    <ion-input type="string" [ngModel]="familyName" [readonly]="!edit"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="stacked">Dirección</ion-label>
+    <ion-textarea type="string" [ngModel]="homeAddress" [readonly]="!edit"></ion-textarea>
+  </ion-item>
+
+  <span *ngIf="edit">
+    <ion-button (click)="updateElement()">Editar</ion-button>
+  </span>
+
+</ion-content>

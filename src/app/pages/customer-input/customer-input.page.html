@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark barra">
+    <ion-title>
+      {{contactFullName}}
+    </ion-title>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" (click)="salir()">
+      <ion-icon name="close"></ion-icon>
+    </ion-button>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+    <ion-label color="primary" position="floating">ID</ion-label>
+    <ion-input [ngModel]="id"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="floating">Nombre</ion-label>
+    <ion-input [ngModel]="contactFullName" [readonly]="!edit"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="floating">Puesto</ion-label>
+    <ion-input [ngModel]="contactPosition" [readonly]="!edit"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="floating">Telefono de Contacto</ion-label>
+    <ion-input [ngModel]="contactPhone" [readonly]="!edit"></ion-input>
+  </ion-item>
+
+  <span *ngIf="edit">
+    <ion-button>Editar</ion-button>
+  </span>
+
+</ion-content>

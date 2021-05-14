@@ -1,0 +1,58 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark barra">
+    <ion-title>
+      {{name}}
+    </ion-title>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" (click)="salir()">
+      <ion-icon name="close"></ion-icon>
+    </ion-button>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+    <ion-label color="primary" position="stacked">ID</ion-label>
+    <ion-input [ngModel]="id"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="stacked">Nombre</ion-label>
+    <ion-input [ngModel]="name" [readonly]="!edit"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label color="primary" position="stacked">Precio</ion-label>
+    <ion-input [ngModel]="price" [readonly]="!edit">$</ion-input>
+  </ion-item>
+
+  <span *ngIf="!edit">
+
+  <span *ngIf="!descontinued">
+    <ion-chip color="success" outline="true">
+      <ion-label>Disponible</ion-label>
+    </ion-chip>
+  </span>
+
+  <span *ngIf="descontinued">
+    <ion-chip color="danger" outline="true">
+      <ion-label>Descontinuado</ion-label>
+    </ion-chip>
+  </span>
+</span>
+
+  <span *ngIf="edit">
+    <ion-item>
+      <ion-label color="primary">Estado</ion-label>
+      <ion-select [value]="this.descontinuado" disabled>
+        <ion-select-option value="false">Disponible</ion-select-option>
+        <ion-select-option value="true">Descontinuado</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-button>Editar</ion-button>
+  </span>
+
+</ion-content>

@@ -1,20 +1,61 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="dark barra">
     <ion-title>
-      Customer
+      {{name}}
     </ion-title>
-    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary">
-      <ion-icon name="person-add"></ion-icon>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" [disabled]="addingElement" (click)="addElement()">
+      <ion-icon [name]="iconAdd"></ion-icon>
     </ion-button>
 
-    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning">
-      <ion-icon name="help"></ion-icon>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning" (click)="reloadCurrentPage()">
+      <ion-icon name="refresh"></ion-icon>
     </ion-button>
 
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <!-- <app-employee-input></app-employee-input> -->
-  <app-explore-container name="Customer"></app-explore-container>
+    <h3>{{name}}</h3>
+  
+    <!-- Section to add a new element -->
+    
+    <div *ngIf="addingElement">
+      Adding Element. Please Wait...
+    </div>
+  
+    
+    <!-- Retrieving information -->
+    <div *ngIf="loading">
+      Loading...
+    </div>
+    
+    
+    <!-- Section to display information -->
+    <div *ngIf="!loading">
+      <!-- Error while retrieving information -->
+      <div *ngIf="error">
+        An error ocurred while retrieving information.
+        <ion-button (click)="getPage(1)">Retry</ion-button>
+      </div>
+  
+      <!-- Display retrieved information -->
+      <div *ngIf="!error">
+        
+        <!-- If there is information -->
+        <ion-list *ngIf="loaded">
+          
+          <app-customer-info (deleteEvent)="deleteElement($event)" (updateEvent)="updateElement($event)" *ngFor="let employee of employees" [customer]="employee"></app-customer-info>
+    
+          <ion-button *ngIf="previousPage" (click)="getPreviousPage()">Previous Page</ion-button>
+          <ion-button *ngIf="nextPage" (click)="getNextPage()">Next Page</ion-button>
+        </ion-list>
+    
+        <!-- If there is no information -->
+        <div *ngIf="!loaded">
+          There is no data to show.
+          <ion-button (click)="getPage(1)">Reload</ion-button>
+        </div>
+      </div>
+      
+    </div>
 </ion-content>

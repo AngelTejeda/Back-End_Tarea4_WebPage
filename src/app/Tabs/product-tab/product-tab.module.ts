@@ -10,6 +10,8 @@ import { ProductTabPage } from './product-tab.page';
 import { ExploreContainerComponentModule } from '../../explore-container/explore-container.module';
 import { RouterModule } from '@angular/router';
 
+import { ComponentsModule } from '../../Components/components.module';
+
 @NgModule({
   imports: [
     IonicModule,
@@ -17,7 +19,8 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     ExploreContainerComponentModule,
     RouterModule.forChild([{ path: '', component: ProductTabPage }]),
-    ProductTabPageRoutingModule
+    ProductTabPageRoutingModule, 
+    ComponentsModule
   ],
   declarations: [ProductTabPage]
 })
