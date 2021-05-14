@@ -4,11 +4,13 @@
       {{name}}
     </ion-title>
     <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" [disabled]="addingElement" (click)="addElement()">
-      <ion-icon [name]="iconAdd"></ion-icon>
+      <ion-icon *ngIf="!addingElement" [name]="iconAdd"></ion-icon>
+      <ion-spinner *ngIf="addingElement" name="circles"></ion-spinner>
     </ion-button>
 
-    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning" (click)="reloadCurrentPage()">
-      <ion-icon name="refresh"></ion-icon>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning" [disabled]="loading" (click)="reloadCurrentPage()">
+      <ion-icon *ngIf="!loading" name="refresh"></ion-icon>
+      <ion-spinner *ngIf="loading" name="circles"></ion-spinner>
     </ion-button>
 
   </ion-toolbar>
@@ -26,7 +28,7 @@
     
     <!-- Retrieving information -->
     <div *ngIf="loading">
-      Loading...
+      <ion-spinner name="circles"></ion-spinner>
     </div>
     
     
