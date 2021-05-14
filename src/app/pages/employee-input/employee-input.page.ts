@@ -36,7 +36,18 @@ employee: EmployeeModels.IEmployee;
       homeAddress: this.homeAddress
     }
 
-    this.element.emit(this.employee);
+    if(this.agregar) {
+      let newEmployee: EmployeeModels.IEmployeePost = {
+        name: this.name, 
+        familyName: this.familyName,
+        homeAddress: this.homeAddress
+      }
+
+      this.element.emit(newEmployee);
+    }
+    else {
+      this.element.emit(this.employee);
+    }
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { IResponse } from 'src/app/Models/api-response-model';
 import EmployeeModels from 'src/app/Models/employee-models';
@@ -79,15 +79,17 @@ export class EmployeeTabPage {
   }
 
 
-  addElement() {
+  addElement(employee: EmployeeModels.IEmployeePost) {
     this.addingElement = true;
 
     // Esta información viene de un forms.
+    /*
     let employee: EmployeeModels.IEmployeePost = {
       homeAddress: "Una casa",
       name: "Un nombre",
       familyName: "Un apellido"
     }
+    */
 
     this.http.postRequest(this.name, employee)
       .subscribe(
@@ -194,6 +196,13 @@ export class EmployeeTabPage {
   }
 
   async abrirModal(editable: boolean, agregable: boolean) {
+    let myEvent = new EventEmitter();
+    myEvent.subscribe(res => {
+      console.log(res);
+      modal.dismiss();
+      this.addElement(res);
+    });
+
     const modal = await this.modalController.create({
       component: EmployeeInputPage,
       componentProps:{
@@ -202,7 +211,8 @@ export class EmployeeTabPage {
         familyName: "",
         homeAddress: "",
         edit: editable,
-        agregar: agregable
+        agregar: agregable,
+        element: myEvent
       }
     });
     return await modal.present();
