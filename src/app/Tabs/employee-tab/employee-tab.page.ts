@@ -97,9 +97,10 @@ export class EmployeeTabPage {
             this.reloadCurrentPage();
         },
         (err) => {
-          alert("An error ocurred while adding the employee.");
-
-          console.log(err);
+          if(err.status == 409)
+            alert("One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
+          else
+            alert("An unexpected error ocurred while adding the record.");
         }
       )
       .add(
@@ -126,9 +127,10 @@ export class EmployeeTabPage {
           this.reloadCurrentPage();
         },
         (err) => {
-          alert("An error ocurred while updating");
-
-          console.log(err);
+          if(err.status == 409)
+            alert("One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.")
+          else
+            alert("An unexpected error ocurred while updating the data.");
         }
       );
   }
@@ -164,8 +166,11 @@ export class EmployeeTabPage {
           else
             this.reloadCurrentPage();
         },
-        (error) => {
-          alert("An error ocurred.");
+        (err) => {
+          if(err.status == 409)
+            alert("Cannot delete this element because it infringes a Constraint.")
+          else
+            alert("An unexpected error ocurred while deleting the record.");
         }
       );
   }

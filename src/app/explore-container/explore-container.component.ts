@@ -166,6 +166,7 @@ export class ExploreContainerComponent implements OnInit {
             this.reloadCurrentPage();
         },
         (err) => {
+          console.log(err.status);
           if(err.status == 409)
             alert("Cannot delete this element because it infringes a Constraint.")
           else
