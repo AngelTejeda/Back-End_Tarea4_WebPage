@@ -95,9 +95,10 @@ export class ExploreContainerComponent implements OnInit {
             this.reloadCurrentPage();
         },
         (err) => {
-          alert("An error ocurred while adding the employee.");
-
-          console.log(err);
+          if(err.status == 409)
+            alert("One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
+          else
+            alert("An unexpected error ocurred while adding the employee.");
         }
       )
       .add(
@@ -125,9 +126,10 @@ export class ExploreContainerComponent implements OnInit {
           this.reloadCurrentPage();
         },
         (err) => {
-          alert("An error ocurred while updating");
-
-          console.log(err);
+          if(err.status == 409)
+            alert("One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.")
+          else
+            alert("An unexpected error ocurred while updating the employee.");
         }
       );
   }
@@ -163,8 +165,11 @@ export class ExploreContainerComponent implements OnInit {
           else
             this.reloadCurrentPage();
         },
-        (error) => {
-          alert("An error ocurred.");
+        (err) => {
+          if(err.status == 409)
+            alert("Cannot delete this element because it infringes a Constraint.")
+          else
+            alert("An unexpected error ocurred while adding the employee.");
         }
       );
   }
