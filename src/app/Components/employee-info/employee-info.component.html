@@ -1,11 +1,16 @@
 <ion-item-sliding>
   <ion-item detail>
-    <ion-button slot="start" fill="clear" color="medium" (click)="update(employee.id)">
+    <ion-button slot="start" fill="clear" color="medium" (click)="toggleEditing()">
       <ion-icon name="pencil"></ion-icon>
     </ion-button>
 
     <ion-icon name="ellipse" style="margin-right: 5px;"></ion-icon>
     <ion-label>{{employee.name}} {{employee.familyName}}</ion-label>
+
+    <div *ngIf="editing">
+      <!-- HERE GOES THE FORM TO EDIT THE EMPLOYEE -->
+      <ion-button (click)="update(employee.id)">Modify!</ion-button>
+    </div>
   </ion-item>
 
   <ion-item-options side="end">

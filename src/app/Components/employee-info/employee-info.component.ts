@@ -12,6 +12,8 @@ export class EmployeeInfoComponent implements OnInit {
   @Output() deleteEvent = new EventEmitter();
   @Output() updateEvent = new EventEmitter();
 
+  editing: boolean = false;
+
   constructor() { }
 
   ngOnInit() {}
@@ -24,4 +26,7 @@ export class EmployeeInfoComponent implements OnInit {
     this.updateEvent.emit(id);
   }
 
+  toggleEditing() {
+    this.editing = !this.editing;
+  }
 }
