@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IResponse } from 'src/app/Models/api-response-model';
-import { IEmployee } from 'src/app/Models/employee-model';
+import { EmployeeModels } from 'src/app/Models/employee-models';
 import { HttpProviderService } from 'src/app/Services/http-provider/http-provider.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class TemplateComponent implements OnInit {
   @Input() name: string;
   @Input() controller: string;
   
-  elements: IEmployee[] = []
+  elements: EmployeeModels.IEmployee[] = []
   nextPage?: number = 1;
   currentPage?: number = null;
   previousPage?: number = null;
@@ -57,7 +57,7 @@ export class TemplateComponent implements OnInit {
   addElement() {
     this.addingElement = true;
 
-    let employee: IEmployee = {
+    let employee: EmployeeModels.IEmployeePost = {
       homeAddress: "Una casa",
       name: "Un nombre",
       familyName: "Un apellido"
@@ -108,7 +108,7 @@ export class TemplateComponent implements OnInit {
   getRequest(page: number) {
     this.loading = true;
 
-    this.http.getRequest<IResponse<IEmployee>>("Employee", `some/${page}`)
+    this.http.getRequest<IResponse<EmployeeModels.IEmployee>>("Employee", `some/${page}`)
       .subscribe(
         (data) => {
           //Info loading

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { IEmployee } from 'src/app/Models/employee-model';
+import { EmployeeModels } from 'src/app/Models/employee-models';
 
 @Component({
   selector: 'app-employee-info',
@@ -7,7 +7,7 @@ import { IEmployee } from 'src/app/Models/employee-model';
   styleUrls: ['./employee-info.component.scss'],
 })
 export class EmployeeInfoComponent implements OnInit {
-  @Input() employee: IEmployee;
+  @Input() employee: EmployeeModels.IEmployee;
 
   @Output() deleteEvent = new EventEmitter();
   @Output() updateEvent = new EventEmitter();

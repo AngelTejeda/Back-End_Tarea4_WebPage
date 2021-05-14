@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpProviderService } from '../Services/http-provider/http-provider.service';
-import { IEmployee } from '../Models/employee-model';
+import { EmployeeModels } from '../Models/employee-models';
 import { IResponse } from '../Models/api-response-model';
-import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-explore-container',
@@ -12,7 +11,7 @@ import { HttpParams } from '@angular/common/http';
 export class ExploreContainerComponent implements OnInit {
   @Input() name: string; 
   
-  employees: IEmployee[] = []
+  employees: EmployeeModels.IEmployee[] = []
   nextPage?: number = 1;
   currentPage?: number = null;
   previousPage?: number = null;
@@ -33,7 +32,7 @@ export class ExploreContainerComponent implements OnInit {
   addElement() {
     this.addingElement = true;
 
-    let employee: IEmployee = {
+    let employee: EmployeeModels.IEmployeePost = {
       homeAddress: "Una casa",
       name: "Un nombre",
       familyName: "Un apellido"
@@ -57,7 +56,26 @@ export class ExploreContainerComponent implements OnInit {
   }
 
   updateElement($event) {
-    //TODO
+    let id = $event;
+
+    // Esta información vendría del formulario
+    let employee: EmployeeModels.IEmployeePut = {
+      homeAddress: "Casita 2",
+      name: "Nombre 2",
+      familyName: "Apellido 2"
+    }
+    
+    this.http.putRequest("Employee", id.toString(), employee)
+      .subscribe(
+        (data) => {
+          alert("Successfully Modified!");
+          this.reloadCurrentPage();
+        },
+        (err) => {
+          alert("An error ocurred while updating");
+          console.log(err);
+        }
+      );
   }
 
   deleteElement($event) {
@@ -86,7 +104,7 @@ export class ExploreContainerComponent implements OnInit {
   getRequest(page: number) {
     this.loading = true;
 
-    this.http.getRequest<IResponse<IEmployee>>("Employee", `pages/${page}`)
+    this.http.getRequest<IResponse<EmployeeModels.IEmployee>>("Employee", `pages/${page}`)
       .subscribe(
         (data) => {
           //Info loading

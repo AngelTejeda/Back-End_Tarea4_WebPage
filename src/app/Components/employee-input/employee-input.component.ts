@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IEmployee } from 'src/app/Models/employee-model';
+import { EmployeeModels } from 'src/app/Models/employee-models';
 
 @Component({
   selector: 'app-employee-input',
@@ -7,7 +7,7 @@ import { IEmployee } from 'src/app/Models/employee-model';
   styleUrls: ['./employee-input.component.scss'],
 })
 export class EmployeeInputComponent implements OnInit {
-  @Input() employee: IEmployee = {id: null, homeAddress: null, name: null, familyName: null};
+  @Input() employee: EmployeeModels.IEmployee = {id: null, homeAddress: null, name: null, familyName: null};
 
   constructor() { }
 
