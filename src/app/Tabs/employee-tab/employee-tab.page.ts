@@ -100,7 +100,7 @@ export class EmployeeTabPage {
         },
         (err) => {
           console.log(err.status);
-          if(err.status == 409)
+          if(err.status == 409 || err.status == 400)
           this.emitAlert("Add","One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
           else
           this.emitAlert("Add","An unexpected error ocurred while adding the record.")
@@ -131,7 +131,7 @@ export class EmployeeTabPage {
           this.reloadCurrentPage();
         },
         (err) => {
-          if(err.status == 409)
+          if(err.status == 409 || err.status == 400)
             this.emitAlert("Update", "One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.");
           else
           this.emitAlert("Update","An unexpected error ocurred while deleting the record.")
@@ -171,7 +171,7 @@ export class EmployeeTabPage {
             this.reloadCurrentPage();
         },
         (err) => {
-          if(err.status == 409)
+          if(err.status == 409 || err.status == 400)
             this.emitAlert("Delete","Cannot delete this element because it infringes a Constraint.")
           else
           this.emitAlert("Delete","An unexpected error ocurred while deleting the record.")
