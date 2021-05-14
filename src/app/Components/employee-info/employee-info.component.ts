@@ -34,6 +34,13 @@ export class EmployeeInfoComponent implements OnInit {
   }
 
   async abrirModal(editable: boolean, agregable: boolean) {
+    let myEvent = new EventEmitter();
+    myEvent.subscribe(res => {
+      console.log(res);
+      this.employee = res;
+      this.updateEvent.emit(this.employee);
+    });
+
     const modal = await this.modalController.create({
       component: EmployeeInputPage,
       componentProps:{
@@ -42,9 +49,11 @@ export class EmployeeInfoComponent implements OnInit {
         familyName: this.employee.familyName,
         homeAddress: this.employee.homeAddress,
         edit: editable,
-        agregar: agregable
+        agregar: agregable,
+        element: myEvent
       }
     });
+
     return await modal.present();
   }
 

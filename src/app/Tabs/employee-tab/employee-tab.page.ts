@@ -112,15 +112,17 @@ export class EmployeeTabPage {
 
 
   updateElement($event) {
-    let id = $event;
+    let employee: EmployeeModels.IEmployee = $event;
     // Esta información vendría del formulario
+    /*
     let employee: EmployeeModels.IEmployeePut = {
       homeAddress: "Casita 2",
       name: "Nombre 2",
       familyName: "Apellido 2"
     }
+    */
     
-    this.http.putRequest(this.name, id.toString(), employee)
+    this.http.putRequest(this.name, employee.id.toString(), employee)
       .subscribe(
         (data) => {
           alert("Successfully Modified!");
