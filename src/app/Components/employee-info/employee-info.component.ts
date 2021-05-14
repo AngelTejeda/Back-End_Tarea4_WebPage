@@ -36,7 +36,6 @@ export class EmployeeInfoComponent implements OnInit {
   async abrirModal(editable: boolean, agregable: boolean) {
     let myEvent = new EventEmitter();
     myEvent.subscribe(res => {
-      console.log(res);
       this.employee = res;
       this.updateEvent.emit(this.employee);
 

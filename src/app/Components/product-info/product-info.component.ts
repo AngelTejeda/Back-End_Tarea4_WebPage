@@ -37,7 +37,6 @@ export class ProductInfoComponent implements OnInit {
   async abrirModal(editable: boolean, agregable: boolean) {
     let myEvent = new EventEmitter();
     myEvent.subscribe(res => {
-      console.log(res);
       this.product = res;
       this.updateEvent.emit(this.product);
 

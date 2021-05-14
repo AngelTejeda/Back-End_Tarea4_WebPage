@@ -70,8 +70,6 @@ export class EmployeeTabPage {
 
           this.error = true;
           this.loaded = false;
-
-          console.log(error);
         }
       )
       .add(() => {
@@ -95,16 +93,17 @@ export class EmployeeTabPage {
     this.http.postRequest(this.name, employee)
       .subscribe(
         (data) => {
-          this.emitAlert("Add","Successfully Added!");
+          this.emitAlert("Add",`Successfully Added with id ${data}!`);
           // If we are in the last page, reload to show the "Next Page" button.
           if(!this.nextPage)
             this.reloadCurrentPage();
         },
         (err) => {
+          console.log(err.status);
           if(err.status == 409)
           this.emitAlert("Add","One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
           else
-          this.emitAlert("Add","An unexpected error ocurred while deleting the record.")
+          this.emitAlert("Add","An unexpected error ocurred while adding the record.")
         }
       )
       .add(
@@ -197,8 +196,8 @@ export class EmployeeTabPage {
   async abrirModal(editable: boolean, agregable: boolean) {
     let myEvent = new EventEmitter();
     myEvent.subscribe(res => {
-      console.log(res);
       modal.dismiss();
+
       this.addElement(res);
     });
 
@@ -227,7 +226,7 @@ export class EmployeeTabPage {
     await alert.present();
   
     const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
+    //console.log('onDidDismiss resolved with role', role);
   }
 
   async abrirAyuda() {

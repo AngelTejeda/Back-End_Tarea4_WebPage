@@ -24,7 +24,6 @@ export class ProductInputPage implements OnInit {
     constructor(private modalController: ModalController) { }
   
     ngOnInit() {
-      console.log()
       if(this.discontinued){
         this.descontinuado = "true"
       }else{
@@ -37,13 +36,11 @@ export class ProductInputPage implements OnInit {
     }
 
     descontinuar(){
-       if(this.descontinuado == "true"){
+      if(this.descontinuado == "true"){
         this.discontinued =  true;
       }else{
         this.discontinued = false;
       }
-      console.log(this.descontinuado)
-      console.log(this.discontinued)
     }
 
     updateElement(){

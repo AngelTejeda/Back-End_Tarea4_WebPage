@@ -17,7 +17,7 @@ export class ProductTabPage implements OnInit {
   iconAdd = "add"
 
   // API Response values
-  employees: ProductModels.IProduct[] = []
+  products: ProductModels.IProduct[] = []
   nextPage?: number = null;
   currentPage?: number = null;
   previousPage?: number = null;
@@ -54,10 +54,10 @@ export class ProductTabPage implements OnInit {
           this.nextPage = data.nextPage;
           this.currentPage = data.currentPage;
           this.previousPage = data.previousPage;
-          this.employees = data.responseList;
+          this.products = data.responseList;
 
           // Check if the response list is not empty.
-          this.loaded = this.employees.length > 0 ? true : false;
+          this.loaded = this.products.length > 0 ? true : false;
 
           // The API responded succesfully
           this.error = false;
@@ -70,8 +70,6 @@ export class ProductTabPage implements OnInit {
 
           this.error = true;
           this.loaded = false;
-
-          console.log(error);
         }
       )
       .add(() => {
@@ -95,7 +93,7 @@ export class ProductTabPage implements OnInit {
     this.http.postRequest(this.name, employee)
       .subscribe(
         (data) => {
-          this.emitAlert("Add","Successfully Added!");
+          this.emitAlert("Add",`Successfully Added with id ${data}!`);
           // If we are in the last page, reload to show the "Next Page" button.
           if (!this.nextPage)
             this.reloadCurrentPage();
@@ -148,7 +146,7 @@ export class ProductTabPage implements OnInit {
       .subscribe(
         (data) => {
           // If the deleated employee is the las employee of the page.
-          if (this.employees.length == 1) {
+          if (this.products.length == 1) {
             // If there is a previous page, go back.
             if (this.previousPage)
               this.getPreviousPage();
@@ -196,9 +194,9 @@ export class ProductTabPage implements OnInit {
 
   async abrirModal(editable: boolean, agregable: boolean) {
     let myEvent = new EventEmitter();
-    myEvent.subscribe(res => {
-      console.log(res);
+    myEvent.subscribe(res => {;
       modal.dismiss();
+
       this.addElement(res);
     });
 
@@ -227,7 +225,7 @@ export class ProductTabPage implements OnInit {
     await alert.present();
 
     const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
+    //console.log('onDidDismiss resolved with role', role);
   }
 
   async abrirAyuda() {

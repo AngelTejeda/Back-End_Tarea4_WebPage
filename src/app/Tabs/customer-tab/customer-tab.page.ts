@@ -16,7 +16,7 @@ export class CustomerTab {
   iconAdd = "person-add"
 
   // API Response values
-  employees: CustomerModels.ICustomer[] = []
+  customers: CustomerModels.ICustomer[] = []
   nextPage?: number = null;
   currentPage?: number = null;
   previousPage?: number = null;
@@ -53,10 +53,10 @@ export class CustomerTab {
           this.nextPage = data.nextPage;
           this.currentPage = data.currentPage;
           this.previousPage = data.previousPage;
-          this.employees = data.responseList;
+          this.customers = data.responseList;
 
           // Check if the response list is not empty.
-          this.loaded = this.employees.length > 0 ? true : false;
+          this.loaded = this.customers.length > 0 ? true : false;
 
           // The API responded succesfully
           this.error = false;
@@ -69,14 +69,11 @@ export class CustomerTab {
 
           this.error = true;
           this.loaded = false;
-
-          console.log(error);
         }
       )
       .add(() => {
         this.loading = false;
       });
-    console.log(this.employees)
   }
 
 
@@ -87,7 +84,7 @@ export class CustomerTab {
     this.http.postRequest(this.name, employee)
       .subscribe(
         (data) => {
-          this.emitAlert("Add", "Successfully Added!");
+          this.emitAlert("Add",`Successfully Added with id ${data}!`);
           // If we are in the last page, reload to show the "Next Page" button.
           if (!this.nextPage)
             this.reloadCurrentPage();
@@ -131,7 +128,7 @@ export class CustomerTab {
       .subscribe(
         (data) => {
           // If the deleated employee is the las employee of the page.
-          if(this.employees.length == 1) {
+          if(this.customers.length == 1) {
             // If there is a previous page, go back.
             if(this.previousPage)
               this.getPreviousPage();
@@ -180,7 +177,6 @@ export class CustomerTab {
   async abrirModal(editable: boolean, agregable: boolean) {
     let myEvent = new EventEmitter();
     myEvent.subscribe(res => {
-      console.log(res);
       modal.dismiss();
       this.addElement(res);
     });
@@ -209,7 +205,7 @@ export class CustomerTab {
     await alert.present();
   
     const { role } = await alert.onDidDismiss();
-    console.log('onDidDismiss resolved with role', role);
+    //console.log('onDidDismiss resolved with role', role);
   }
 
   async abrirAyuda() {

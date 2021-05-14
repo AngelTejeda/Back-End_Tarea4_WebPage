@@ -37,7 +37,6 @@ export class CustomerInfoComponent implements OnInit {
   async abrirModal(editable: boolean, agregable: boolean) {
     let myEvent = new EventEmitter();
     myEvent.subscribe(res => {
-      console.log(res);
       this.customer = res;
       this.updateEvent.emit(this.customer);
 

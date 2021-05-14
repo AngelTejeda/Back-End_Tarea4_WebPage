@@ -31,7 +31,6 @@ export class CustomerInputPage implements OnInit {
     }
 
     updateElement(){
-      console.log(this.id)
       this.customer = {
         id: this.id,
         company: this.company,
