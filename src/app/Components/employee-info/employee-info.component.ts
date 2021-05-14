@@ -25,14 +25,15 @@ export class EmployeeInfoComponent implements OnInit {
   }
 
   update(id: number) {
-    this.updateEvent.emit(id);
+    this.abrirModal(true, false);
+    //this.updateEvent.emit(id);
   }
 
   toggleEditing() {
     this.editing = !this.editing;
   }
 
-  async abrirModal(editable: boolean) {
+  async abrirModal(editable: boolean, agregable: boolean) {
     const modal = await this.modalController.create({
       component: EmployeeInputPage,
       componentProps:{
@@ -40,7 +41,8 @@ export class EmployeeInfoComponent implements OnInit {
         name: this.employee.name,
         familyName: this.employee.familyName,
         homeAddress: this.employee.homeAddress,
-        edit: editable
+        edit: editable,
+        agregar: agregable
       }
     });
     return await modal.present();

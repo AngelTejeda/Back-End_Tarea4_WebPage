@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import EmployeeModels from 'src/app/Models/employee-models';
 
@@ -13,8 +13,11 @@ export class EmployeeInputPage implements OnInit {
 @Input() familyName: string;
 @Input() homeAddress: string;
 @Input() edit: boolean;
+@Input() agregar: boolean;
 
-employee: EmployeeModels.IEmployeePut;
+@Output() element = new EventEmitter();
+
+employee: EmployeeModels.IEmployee;
 
   constructor(private modalController: ModalController) { }
 
@@ -23,6 +26,17 @@ employee: EmployeeModels.IEmployeePut;
 
   salir(){
     this.modalController.dismiss();
+  }
+
+  updateElement(){
+    this.employee = {
+      id: this.id,
+      name: this.name, 
+      familyName: this.familyName,
+      homeAddress: this.homeAddress
+    }
+
+    this.element.emit(this.employee);
   }
 
 }

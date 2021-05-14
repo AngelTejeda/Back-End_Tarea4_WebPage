@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { IResponse } from 'src/app/Models/api-response-model';
 import EmployeeModels from 'src/app/Models/employee-models';
+import { EmployeeInputPage } from 'src/app/pages/employee-input/employee-input.page';
 import { HttpProviderService } from 'src/app/Services/http-provider/http-provider.service';
 
 @Component({
@@ -25,7 +27,7 @@ export class EmployeeTabPage {
   loading: boolean = false;
   addingElement: boolean = false;
 
-  constructor(private http: HttpProviderService) { }
+  constructor(private http: HttpProviderService, private modalController: ModalController) { }
 
   ngOnInit() {
     this.getPage(1);
@@ -187,5 +189,20 @@ export class EmployeeTabPage {
 
   getNextPage() {
     this.getPage(this.nextPage);
+  }
+
+  async abrirModal(editable: boolean, agregable: boolean) {
+    const modal = await this.modalController.create({
+      component: EmployeeInputPage,
+      componentProps:{
+        id: 0,
+        name: "",
+        familyName: "",
+        homeAddress: "",
+        edit: editable,
+        agregar: agregable
+      }
+    });
+    return await modal.present();
   }
 }
