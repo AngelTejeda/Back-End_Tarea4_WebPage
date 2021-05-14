@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { IResponse } from 'src/app/Models/api-response-model';
 import EmployeeModels from 'src/app/Models/employee-models';
 import { EmployeeInputPage } from 'src/app/pages/employee-input/employee-input.page';
+import { HelpInfoPage } from 'src/app/pages/help-info/help-info.page';
 import { HttpProviderService } from 'src/app/Services/http-provider/http-provider.service';
 
 @Component({
@@ -94,17 +95,16 @@ export class EmployeeTabPage {
     this.http.postRequest(this.name, employee)
       .subscribe(
         (data) => {
-          alert("Successfully Added!");
-
+          this.emitAlert("Add","Successfully Added!");
           // If we are in the last page, reload to show the "Next Page" button.
           if(!this.nextPage)
             this.reloadCurrentPage();
         },
         (err) => {
           if(err.status == 409)
-            alert("One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
+          this.emitAlert("Add","One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
           else
-            alert("An unexpected error ocurred while adding the record.");
+          this.emitAlert("Add","An unexpected error ocurred while deleting the record.")
         }
       )
       .add(
@@ -127,16 +127,15 @@ export class EmployeeTabPage {
     this.http.putRequest(this.name, employee.id.toString(), employee)
       .subscribe(
         (data) => {
-          alert("Successfully Modified!");
-
+          this.emitAlert("Update","Successfully Modified!");
           // Reload the page to show the changes.
           this.reloadCurrentPage();
         },
         (err) => {
           if(err.status == 409)
-            alert("One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.")
+            this.emitAlert("Update", "One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.");
           else
-            alert("An unexpected error ocurred while updating the data.");
+          this.emitAlert("Update","An unexpected error ocurred while deleting the record.")
         }
       );
   }
@@ -174,9 +173,9 @@ export class EmployeeTabPage {
         },
         (err) => {
           if(err.status == 409)
-            alert("Cannot delete this element because it infringes a Constraint.")
+            this.emitAlert("Delete","Cannot delete this element because it infringes a Constraint.")
           else
-            alert("An unexpected error ocurred while deleting the record.");
+          this.emitAlert("Delete","An unexpected error ocurred while deleting the record.")
         }
       );
   }
@@ -217,4 +216,25 @@ export class EmployeeTabPage {
     });
     return await modal.present();
   }
+
+  async emitAlert(header: string, message: string) {
+    const alert = document.createElement('ion-alert');
+    alert.header = header + " Employee";
+    alert.message = message;
+    alert.buttons = ['OK'];
+  
+    document.body.appendChild(alert);
+    await alert.present();
+  
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
+  }
+
+  async abrirAyuda() {
+    const modal = await this.modalController.create({
+      component: HelpInfoPage,
+    });
+    return await modal.present();
+  }
+
 }

@@ -12,6 +12,10 @@
 
 <ion-content>
 
+  <div style="text-align: center;">
+    <ion-icon name="person-circle" class="content"></ion-icon>
+  </div>
+
   <ion-item>
     <ion-label color="primary" position="stacked">ID</ion-label>
     <ion-input type="string" [(ngModel)]="id" [readonly]="!edit"></ion-input>
@@ -37,12 +41,13 @@
     <ion-input type="string" [(ngModel)]="contactPhone" [readonly]="!edit"></ion-input>
   </ion-item>
 
+  <div style="text-align: center; margin: 20px;">
   <span *ngIf="edit&&!agregar">
-    <ion-button (click)="updateElement()">Editar</ion-button>
+    <ion-button (click)="updateElement()" fill="outline"><b>Editar</b></ion-button>
   </span>
 
   <span *ngIf="agregar">
-    <ion-button (click)="updateElement()">Agregar</ion-button>
+    <ion-button (click)="updateElement()" fill="outline"><b>Agregar</b></ion-button>
   </span>
-
+</div>
 </ion-content>

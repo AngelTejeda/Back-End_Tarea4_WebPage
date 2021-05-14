@@ -3,61 +3,75 @@
     <ion-title>
       {{name}}
     </ion-title>
-    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" [disabled]="addingElement" (click)="abrirModal(true, true)">
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" [disabled]="addingElement"
+      (click)="abrirModal(true, true)">
       <ion-icon *ngIf="!addingElement" [name]="iconAdd"></ion-icon>
       <ion-spinner *ngIf="addingElement" name="circles"></ion-spinner>
     </ion-button>
 
-    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning" [disabled]="loading" (click)="reloadCurrentPage()">
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning" [disabled]="loading"
+      (click)="reloadCurrentPage()">
       <ion-icon *ngIf="!loading" name="refresh"></ion-icon>
       <ion-spinner *ngIf="loading" name="circles"></ion-spinner>
+    </ion-button>
+
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="success" (click)="abrirAyuda()">
+      <ion-icon name="help"></ion-icon>
     </ion-button>
 
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <h3>{{name}}</h3>
-  
-    <!-- Section to add a new element -->
+  <h3>{{name}}</h3>
 
-    <div *ngIf="addingElement">
-      Adding Element. Please Wait...
+  <!-- Section to add a new element -->
+
+  <div *ngIf="addingElement">
+    Adding Element. Please Wait...
+  </div>
+
+
+  <!-- Retrieving information -->
+  <div *ngIf="loading">
+    <ion-spinner name="circles"></ion-spinner>
+  </div>
+
+
+  <!-- Section to display information -->
+  <div *ngIf="!loading">
+    <!-- Error while retrieving information -->
+    <div *ngIf="error">
+      An error ocurred while retrieving information.
+      <ion-button (click)="getPage(1)">Retry</ion-button>
     </div>
-  
-    
-    <!-- Retrieving information -->
-    <div *ngIf="loading">
-      <ion-spinner name="circles"></ion-spinner>
-    </div>
-    
-    
-    <!-- Section to display information -->
-    <div *ngIf="!loading">
-      <!-- Error while retrieving information -->
-      <div *ngIf="error">
-        An error ocurred while retrieving information.
-        <ion-button (click)="getPage(1)">Retry</ion-button>
-      </div>
-  
-      <!-- Display retrieved information -->
-      <div *ngIf="!error">
-        
-        <!-- If there is information -->
-        <ion-list *ngIf="loaded">
-          
-          <app-employee-info (deleteEvent)="deleteElement($event)" (updateEvent)="updateElement($event)" *ngFor="let employee of employees" [employee]="employee"></app-employee-info>
-    
-          <ion-button *ngIf="previousPage" (click)="getPreviousPage()">Previous Page</ion-button>
-          <ion-button *ngIf="nextPage" (click)="getNextPage()">Next Page</ion-button>
-        </ion-list>
-    
-        <!-- If there is no information -->
-        <div *ngIf="!loaded">
-          There is no data to show.
-          <ion-button (click)="getPage(1)">Reload</ion-button>
+
+    <!-- Display retrieved information -->
+    <div *ngIf="!error">
+
+      <!-- If there is information -->
+      <ion-list *ngIf="loaded">
+        <div style="margin-bottom: 20px;">
+          <app-employee-info (deleteEvent)="deleteElement($event)" (updateEvent)="updateElement($event)"
+            *ngFor="let employee of employees" [employee]="employee"></app-employee-info>
         </div>
+        <div class="botones" style="margin-bottom: 10px">
+          <ion-button *ngIf="previousPage" (click)="getPreviousPage()" style="margin: 5px">
+            <ion-icon name="arrow-back"></ion-icon>
+            <ion-label style="font-size: x-small; margin-left: 2px;">Previous Page</ion-label>
+          </ion-button>
+          <ion-button *ngIf="nextPage" (click)="getNextPage()" style="margin: 5px">
+            <ion-label style="font-size: x-small; margin-right: 2px;">Next Page</ion-label>
+            <ion-icon name="arrow-forward"></ion-icon>   
+          </ion-button></div>
+      </ion-list>
+
+      <!-- If there is no information -->
+      <div *ngIf="!loaded">
+        There is no data to show.
+        <ion-button (click)="getPage(1)">Reload</ion-button>
       </div>
-      
     </div>
+
+  </div>
 </ion-content>

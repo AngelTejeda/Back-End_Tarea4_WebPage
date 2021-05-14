@@ -12,6 +12,9 @@
 
 <ion-content>
 
+  <div style="text-align: center;">
+  <ion-icon name="person-circle" class="content"></ion-icon>
+</div>
   <span *ngIf="!agregar">
   <ion-item>
     <ion-label color="primary" position="stacked">ID</ion-label>
@@ -33,12 +36,14 @@
     <ion-textarea type="string" [(ngModel)]="homeAddress" [readonly]="!edit"></ion-textarea>
   </ion-item>
 
-  <span *ngIf="edit&&!agregar">
-    <ion-button (click)="updateElement()">Editar</ion-button>
-  </span>
-
-  <span *ngIf="agregar">
-    <ion-button (click)="updateElement()">Agregar</ion-button>
-  </span>
+  <div style="text-align: center; margin: 20px;">
+    <span *ngIf="edit&&!agregar">
+      <ion-button (click)="updateElement()" fill="outline"><b>Editar</b></ion-button>
+    </span>
+  
+    <span *ngIf="agregar">
+      <ion-button (click)="updateElement()" fill="outline"><b>Agregar</b></ion-button>
+    </span>
+  </div>
 
 </ion-content>

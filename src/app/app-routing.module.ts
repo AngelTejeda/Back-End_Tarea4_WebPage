@@ -20,6 +20,10 @@ const routes: Routes = [
   {
     path: 'tarea-info',
     loadChildren: () => import('./pages/tarea-info/tarea-info.module').then( m => m.TareaInfoPageModule)
+  },
+  {
+    path: 'help-info',
+    loadChildren: () => import('./pages/help-info/help-info.module').then( m => m.HelpInfoPageModule)
   }
 
 ];

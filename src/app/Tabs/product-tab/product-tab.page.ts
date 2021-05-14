@@ -1,7 +1,8 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { IResponse } from 'src/app/Models/api-response-model';
-import {ProductModels} from 'src/app/models/product-models';
+import { ProductModels } from 'src/app/models/product-models';
+import { HelpInfoPage } from 'src/app/pages/help-info/help-info.page';
 import { ProductInputPage } from 'src/app/pages/product-input/product-input.page';
 import { HttpProviderService } from 'src/app/Services/http-provider/http-provider.service';
 
@@ -54,7 +55,7 @@ export class ProductTabPage implements OnInit {
           this.currentPage = data.currentPage;
           this.previousPage = data.previousPage;
           this.employees = data.responseList;
-          
+
           // Check if the response list is not empty.
           this.loaded = this.employees.length > 0 ? true : false;
 
@@ -94,21 +95,20 @@ export class ProductTabPage implements OnInit {
     this.http.postRequest(this.name, employee)
       .subscribe(
         (data) => {
-          alert("Successfully Added!");
-
+          this.emitAlert("Add","Successfully Added!");
           // If we are in the last page, reload to show the "Next Page" button.
-          if(!this.nextPage)
+          if (!this.nextPage)
             this.reloadCurrentPage();
         },
         (err) => {
-          if(err.status == 409)
-            alert("One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
+          if (err.status == 409)
+          this.emitAlert("Add", "One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.");
           else
-            alert("An unexpected error ocurred while adding the record.");
+            this.emitAlert("Add", "An unexpected error ocurred while adding the record.");
         }
       )
       .add(
-        () => {this.addingElement = false;}
+        () => { this.addingElement = false; }
       );
   }
 
@@ -123,20 +123,19 @@ export class ProductTabPage implements OnInit {
       familyName: "Apellido 2"
     }
     */
-    
+
     this.http.putRequest(this.name, employee.id.toString(), employee)
       .subscribe(
         (data) => {
-          alert("Successfully Modified!");
-
+          this.emitAlert("Update", "Successfully Modified!");
           // Reload the page to show the changes.
           this.reloadCurrentPage();
         },
         (err) => {
-          if(err.status == 409)
-            alert("One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.")
+          if (err.status == 409)
+            this.emitAlert("Update", "One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.");
           else
-            alert("An unexpected error ocurred while updating the data.");
+            this.emitAlert("Update", "An unexpected error ocurred while updating the data.");
         }
       );
   }
@@ -149,15 +148,15 @@ export class ProductTabPage implements OnInit {
       .subscribe(
         (data) => {
           // If the deleated employee is the las employee of the page.
-          if(this.employees.length == 1) {
+          if (this.employees.length == 1) {
             // If there is a previous page, go back.
-            if(this.previousPage)
+            if (this.previousPage)
               this.getPreviousPage();
-            
+
             // If there is not a previous page, but there is a next page, go next.
-            else if(this.nextPage)
+            else if (this.nextPage)
               this.getNextPage();
-            
+
             // Otherwise, there are no more elements to show
             else {
               this.nextPage = null;
@@ -173,10 +172,10 @@ export class ProductTabPage implements OnInit {
             this.reloadCurrentPage();
         },
         (err) => {
-          if(err.status == 409)
-            alert("Cannot delete this element because it infringes a Constraint.")
+          if (err.status == 409)
+            this.emitAlert("Delete", "Cannot delete this element because it infringes a Constraint.");
           else
-            alert("An unexpected error ocurred while deleting the record.");
+            this.emitAlert("Delete", "An unexpected error ocurred while deleting the record.");
         }
       );
   }
@@ -188,7 +187,7 @@ export class ProductTabPage implements OnInit {
   }
 
   getPreviousPage() {
-    this.getPage(this.previousPage); 
+    this.getPage(this.previousPage);
   }
 
   getNextPage() {
@@ -205,15 +204,35 @@ export class ProductTabPage implements OnInit {
 
     const modal = await this.modalController.create({
       component: ProductInputPage,
-      componentProps:{
+      componentProps: {
         id: 0,
         name: "",
         price: "",
-        discontinued: true,
+        discontinued: false,
         edit: editable,
         agregar: agregable,
         element: myEvent
       }
+    });
+    return await modal.present();
+  }
+
+  async emitAlert(header: string, message: string) {
+    const alert = document.createElement('ion-alert');
+    alert.header = header + " Product";
+    alert.message = message;
+    alert.buttons = ['OK'];
+
+    document.body.appendChild(alert);
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
+  }
+
+  async abrirAyuda() {
+    const modal = await this.modalController.create({
+      component: HelpInfoPage,
     });
     return await modal.present();
   }

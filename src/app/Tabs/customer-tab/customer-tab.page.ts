@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { IResponse } from 'src/app/Models/api-response-model';
 import CustomerModels from 'src/app/models/customer-models';
 import { CustomerInputPage } from 'src/app/pages/customer-input/customer-input.page';
+import { HelpInfoPage } from 'src/app/pages/help-info/help-info.page';
 import { HttpProviderService } from 'src/app/Services/http-provider/http-provider.service';
 
 @Component({
@@ -53,7 +54,7 @@ export class CustomerTab {
           this.currentPage = data.currentPage;
           this.previousPage = data.previousPage;
           this.employees = data.responseList;
-          
+
           // Check if the response list is not empty.
           this.loaded = this.employees.length > 0 ? true : false;
 
@@ -75,7 +76,7 @@ export class CustomerTab {
       .add(() => {
         this.loading = false;
       });
-      console.log(this.employees)
+    console.log(this.employees)
   }
 
 
@@ -86,49 +87,46 @@ export class CustomerTab {
     this.http.postRequest(this.name, employee)
       .subscribe(
         (data) => {
-          alert("Successfully Added!");
-
+          this.emitAlert("Add", "Successfully Added!");
           // If we are in the last page, reload to show the "Next Page" button.
-          if(!this.nextPage)
+          if (!this.nextPage)
             this.reloadCurrentPage();
         },
         (err) => {
-          if(err.status == 409)
-            alert("One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
+          if (err.status == 409)
+            this.emitAlert("Add", "One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.");
           else
-            alert("An unexpected error ocurred while adding the record.");
+            this.emitAlert("Add", "An unexpected error ocurred while adding the record.");
         }
       )
       .add(
-        () => {this.addingElement = false;}
+        () => { this.addingElement = false; }
       );
   }
 
 
   updateElement($event) {
     let employee: CustomerModels.ICustomer = $event;
-    
-    this.http.putRequest(this.name, employee.id.toString(), employee)
-    .subscribe(
-      (data) => {
-        alert("Successfully Modified!");
 
-        // Reload the page to show the changes.
-        this.reloadCurrentPage();
-      },
-      (err) => {
-        if(err.status == 409)
-          alert("One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.")
-        else
-          alert("An unexpected error ocurred while updating the data.");
-      }
-    );
+    this.http.putRequest(this.name, employee.id.toString(), employee)
+      .subscribe(
+        (data) => {
+          this.emitAlert("Update", "Successfully Modified!");
+          // Reload the page to show the changes.
+          this.reloadCurrentPage();
+        },
+        (err) => {
+          if (err.status == 409)
+            this.emitAlert("Update", "One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.");
+          else
+            this.emitAlert("Update","An unexpected error ocurred while updating the data.");
+        }
+      );
   }
 
 
   deleteElement($event) {
     let id = $event;
-
     this.http.deleteRequest(this.name, `${id}`)
       .subscribe(
         (data) => {
@@ -156,8 +154,11 @@ export class CustomerTab {
           else
             this.reloadCurrentPage();
         },
-        (error) => {
-          alert("An error ocurred.");
+        (err) => {
+          if(err.status == 409)
+            this.emitAlert("Delete","Cannot delete this element because it infringes a Constraint.")
+          else
+          this.emitAlert("Delete","An unexpected error ocurred while deleting the record.")
         }
       );
   }
@@ -169,7 +170,7 @@ export class CustomerTab {
   }
 
   getPreviousPage() {
-    this.getPage(this.previousPage); 
+    this.getPage(this.previousPage);
   }
 
   getNextPage() {
@@ -186,7 +187,7 @@ export class CustomerTab {
 
     const modal = await this.modalController.create({
       component: CustomerInputPage,
-      componentProps:{
+      componentProps: {
         id: "",
         company: "",
         contactFullName: "",
@@ -194,6 +195,26 @@ export class CustomerTab {
         agregar: agregable,
         element: myEvent
       }
+    });
+    return await modal.present();
+  }
+
+  async emitAlert(header: string, message: string) {
+    const alert = document.createElement('ion-alert');
+    alert.header = header + " Customer";
+    alert.message = message;
+    alert.buttons = ['OK'];
+  
+    document.body.appendChild(alert);
+    await alert.present();
+  
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
+  }
+
+  async abrirAyuda() {
+    const modal = await this.modalController.create({
+      component: HelpInfoPage,
     });
     return await modal.present();
   }
