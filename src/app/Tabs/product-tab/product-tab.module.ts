@@ -7,9 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProductTabPageRoutingModule } from './product-tab-routing.module';
 
 import { ProductTabPage } from './product-tab.page';
-import { ExploreContainerComponentModule } from '../../explore-container/explore-container.module';
 import { RouterModule } from '@angular/router';
-
 import { ComponentsModule } from '../../Components/components.module';
 
 @NgModule({
@@ -17,11 +15,10 @@ import { ComponentsModule } from '../../Components/components.module';
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
     RouterModule.forChild([{ path: '', component: ProductTabPage }]),
-    ProductTabPageRoutingModule, 
+    ProductTabPageRoutingModule,
     ComponentsModule
   ],
   declarations: [ProductTabPage]
 })
-export class ProductTabPageModule {}
+export class ProductTabPageModule { }
