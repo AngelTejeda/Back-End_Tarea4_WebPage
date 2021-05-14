@@ -2,9 +2,7 @@
   <h3>{{ name }}</h3>
 
   <!-- Section to add a new element -->
-  <div *ngIf="!addingElement">
-    <ion-button (click)="addElement()">Add!</ion-button>
-  </div>
+  <ion-button [disabled]="addingElement" (click)="addElement()">Add!</ion-button>
   <div *ngIf="addingElement">
     Adding Element. Pleas Wait...
   </div>
@@ -21,7 +19,7 @@
     <!-- Error while retrieving information -->
     <div *ngIf="error">
       An error ocurred while retrieving information.
-      <ion-button (click)="getNextPage()">Retry</ion-button>
+      <ion-button (click)="getPage(1)">Retry</ion-button>
     </div>
 
     <!-- Display retrieved information -->
@@ -41,7 +39,7 @@
       <!-- If there is no information -->
       <div *ngIf="!loaded">
         There is no data to show.
-        <ion-button (click)="getNextPage()">Reload</ion-button>
+        <ion-button (click)="getPage(1)">Reload</ion-button>
       </div>
     </div>
     

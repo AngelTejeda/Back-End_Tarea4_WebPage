@@ -11,27 +11,74 @@ import { IResponse } from '../Models/api-response-model';
 export class ExploreContainerComponent implements OnInit {
   @Input() name: string; 
   
+  // API Response values
   employees: EmployeeModels.IEmployee[] = []
-  nextPage?: number = 1;
+  nextPage?: number = null;
   currentPage?: number = null;
   previousPage?: number = null;
 
+  // Navigation helpers
   loaded: boolean = false;
   error: boolean = false;
   loading: boolean = false;
   addingElement: boolean = false;
 
-  constructor(private http: HttpProviderService) {
-    
-  }
+  constructor(private http: HttpProviderService) { }
 
   ngOnInit() {
     this.getNextPage();
   }
 
+  //////////////////////////////////
+
+  // NOTA: Cambiar los alerts por algún cuadro de diálogo que salga por unos segundos y se vuelva a ocultar
+  // pero que el usuario no tenga que quitar manualmente.
+
+  //////////////////////////////////
+
+
+  // HTTP REQUESTS //
+
+  getPage(page: number) {
+    this.loading = true;
+
+    this.http.getRequest<IResponse<EmployeeModels.IEmployee>>("Employee", `pages/${page}`)
+      .subscribe(
+        (data) => {
+          // Load info from the response.
+          this.nextPage = data.nextPage;
+          this.currentPage = data.currentPage;
+          this.previousPage = data.previousPage;
+          this.employees = data.responseList;
+          
+          // Check if the response list is not empty.
+          this.loaded = this.employees.length > 0 ? true : false;
+
+          // The API responded succesfully
+          this.error = false;
+        },
+        (error) => {
+          // Reset values
+          this.nextPage = null;
+          this.currentPage = null;
+          this.previousPage = null;
+
+          this.error = true;
+          this.loaded = false;
+
+          console.log(error);
+        }
+      )
+      .add(() => {
+        this.loading = false;
+      });
+  }
+
+
   addElement() {
     this.addingElement = true;
 
+    // Esta información viene de un forms.
     let employee: EmployeeModels.IEmployeePost = {
       homeAddress: "Una casa",
       name: "Un nombre",
@@ -42,11 +89,14 @@ export class ExploreContainerComponent implements OnInit {
       .subscribe(
         (data) => {
           alert("Successfully Added!");
+
+          // If we are in the last page, reload to show the "Next Page" button.
           if(!this.nextPage)
             this.reloadCurrentPage();
         },
         (err) => {
-          alert("An error ocurred");
+          alert("An error ocurred while adding the employee.");
+
           console.log(err);
         }
       )
@@ -54,6 +104,7 @@ export class ExploreContainerComponent implements OnInit {
         () => {this.addingElement = false;}
       );
   }
+
 
   updateElement($event) {
     let id = $event;
@@ -69,14 +120,18 @@ export class ExploreContainerComponent implements OnInit {
       .subscribe(
         (data) => {
           alert("Successfully Modified!");
+
+          // Reload the page to show the changes.
           this.reloadCurrentPage();
         },
         (err) => {
           alert("An error ocurred while updating");
+
           console.log(err);
         }
       );
   }
+
 
   deleteElement($event) {
     let id = $event;
@@ -84,14 +139,27 @@ export class ExploreContainerComponent implements OnInit {
     this.http.deleteRequest("Employee", `${id}`)
       .subscribe(
         (data) => {
+          // If the deleated employee is the las employee of the page.
           if(this.employees.length == 1) {
+            // If there is a previous page, go back.
             if(this.previousPage)
               this.getPreviousPage();
+            
+            // If there is not a previous page, but there is a next page, go next.
             else if(this.nextPage)
               this.getNextPage();
-            else
+            
+            // Otherwise, there are no more elements to show
+            else {
+              this.nextPage = null;
+              this.currentPage = null;
+              this.previousPage = null;
+
               this.loaded = false;
+            }
           }
+
+          // Otherwise, reload the page to show the changes.
           else
             this.reloadCurrentPage();
         },
@@ -101,48 +169,18 @@ export class ExploreContainerComponent implements OnInit {
       );
   }
 
-  getRequest(page: number) {
-    this.loading = true;
 
-    this.http.getRequest<IResponse<EmployeeModels.IEmployee>>("Employee", `pages/${page}`)
-      .subscribe(
-        (data) => {
-          //Info loading
-          this.nextPage = data.nextPage;
-          this.currentPage = data.currentPage;
-          this.previousPage = data.previousPage;
-          this.employees = data.responseList;
-          
-          //
-          this.loaded = this.employees.length > 0 ? true : false;
-          this.error = false;
-        },
-        (error) => {
-          this.nextPage = 1;
-          this.currentPage = null;
-          this.previousPage = null;
-
-          this.error = true;
-          this.loaded = false;
-
-          console.log(error);
-        }
-      )
-      .add(() => {
-        this.loading = false;
-      });
-  }
-
+  // NAVIGATION //
   reloadCurrentPage() {
-    this.getRequest(this.currentPage);
+    this.getPage(this.currentPage);
   }
 
   getPreviousPage() {
-    this.getRequest(this.previousPage); 
+    this.getPage(this.previousPage); 
   }
 
   getNextPage() {
-    this.getRequest(this.nextPage);
+    this.getPage(this.nextPage);
   }
   
 }
