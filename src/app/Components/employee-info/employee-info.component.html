@@ -9,6 +9,7 @@
 
     <div *ngIf="editing">
       <!-- HERE GOES THE FORM TO EDIT THE EMPLOYEE -->
+      <app-employee-input></app-employee-input>
       <ion-button (click)="update(employee.id)">Modify!</ion-button>
     </div>
   </ion-item>

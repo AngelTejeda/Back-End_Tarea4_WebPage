@@ -26,7 +26,7 @@ export class ExploreContainerComponent implements OnInit {
   constructor(private http: HttpProviderService) { }
 
   ngOnInit() {
-    this.getNextPage();
+    this.getPage(1);
   }
 
   //////////////////////////////////
