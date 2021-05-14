@@ -119,8 +119,6 @@ export class EmployeeTabPage {
       .subscribe(
         (data) => {
           this.emitAlert("Update","Successfully Modified!");
-          // Reload the page to show the changes.
-          this.reloadCurrentPage();
         },
         (err) => {
           if(err.status == 409 || err.status == 400)
@@ -128,7 +126,11 @@ export class EmployeeTabPage {
           else
           this.emitAlert("Update","An unexpected error ocurred while deleting the record.")
         }
-      );
+      )
+      .add(() => {
+        // Reload the page to show the changes.
+        this.reloadCurrentPage();
+      });
   }
 
 

@@ -3,12 +3,16 @@
     <ion-title>
       {{name}}
     </ion-title>
-    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" [disabled]="addingElement" (click)="abrirModal(true, true)">
-      <ion-icon [name]="iconAdd"></ion-icon>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="secondary" [disabled]="addingElement"
+      (click)="abrirModal(true, true)">
+      <ion-icon *ngIf="!addingElement" [name]="iconAdd"></ion-icon>
+      <ion-spinner *ngIf="addingElement" name="circles"></ion-spinner>
     </ion-button>
 
-    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning" (click)="reloadCurrentPage()">
-      <ion-icon name="refresh"></ion-icon>
+    <ion-button slot="end" fill="clear" style="margin:0px;" color="warning" [disabled]="loading"
+      (click)="reloadCurrentPage()">
+      <ion-icon *ngIf="!loading" name="refresh"></ion-icon>
+      <ion-spinner *ngIf="loading" name="circles"></ion-spinner>
     </ion-button>
 
     <ion-button slot="end" fill="clear" style="margin:0px;" color="success" (click)="abrirAyuda()">
@@ -24,21 +28,21 @@
     <!-- Section to add a new element -->
     
     <div *ngIf="addingElement">
-      Adding Element. Please Wait...
+        Adding Element. Please Wait...
     </div>
   
     
     <!-- Retrieving information -->
     <div *ngIf="loading">
-      Loading...
+      <ion-spinner name="circles"></ion-spinner>
     </div>
     
     
     <!-- Section to display information -->
     <div *ngIf="!loading">
       <!-- Error while retrieving information -->
-      <div *ngIf="error">
-        An error ocurred while retrieving information.
+      <div *ngIf="error" style="text-align: center;">
+        <h4>An error ocurred while retrieving information.</h4>
         <ion-button (click)="getPage(1)">Retry</ion-button>
       </div>
   
@@ -62,8 +66,8 @@
         </ion-list>
     
         <!-- If there is no information -->
-        <div *ngIf="!loaded">
-          There is no data to show.
+        <div *ngIf="!loaded" style="text-align: center;">
+          <h4>There is no data to show.</h4>
           <ion-button (click)="getPage(1)">Reload</ion-button>
         </div>
       </div>

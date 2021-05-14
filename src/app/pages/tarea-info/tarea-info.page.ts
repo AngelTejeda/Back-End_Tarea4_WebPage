@@ -11,10 +11,10 @@ export class TareaInfoPage implements OnInit {
   constructor(private modalController: ModalController) { }
 
   equipo=[
-    "Jose Santos Flores Silva",
-    "Edson Yael Garcia Silva",
-    "Sofia Alejandra Gaytan Diaz",
-    "Angel Tejeda Tiscareño"
+    "José Santos Flores Silva",
+    "Edson Yael García Silva",
+    "Sofía Alejandra Gaytán Díaz",
+    "Ángel Tejeda Tiscareño"
   ]
 
   ngOnInit() {

@@ -126,8 +126,6 @@ export class ProductTabPage implements OnInit {
       .subscribe(
         (data) => {
           this.emitAlert("Update", "Successfully Modified!");
-          // Reload the page to show the changes.
-          this.reloadCurrentPage();
         },
         (err) => {
           if (err.status == 409 || err.status == 400)
@@ -135,7 +133,11 @@ export class ProductTabPage implements OnInit {
           else
             this.emitAlert("Update", "An unexpected error ocurred while updating the data.");
         }
-      );
+      )
+      .add(() => {
+        // Reload the page to show the changes.
+        this.reloadCurrentPage();
+      });;
   }
 
 
