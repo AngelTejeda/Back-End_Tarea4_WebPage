@@ -39,6 +39,8 @@ export class EmployeeInfoComponent implements OnInit {
       console.log(res);
       this.employee = res;
       this.updateEvent.emit(this.employee);
+
+      modal.dismiss();
     });
 
     const modal = await this.modalController.create({
