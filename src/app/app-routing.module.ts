@@ -16,6 +16,10 @@ const routes: Routes = [
   {
     path: 'product-input',
     loadChildren: () => import('./pages/product-input/product-input.module').then( m => m.ProductInputPageModule)
+  },
+  {
+    path: 'tarea-info',
+    loadChildren: () => import('./pages/tarea-info/tarea-info.module').then( m => m.TareaInfoPageModule)
   }
 
 ];

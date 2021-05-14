@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { IResponse } from 'src/app/Models/api-response-model';
 import {ProductModels} from 'src/app/models/product-models';
+import { ProductInputPage } from 'src/app/pages/product-input/product-input.page';
 import { HttpProviderService } from 'src/app/Services/http-provider/http-provider.service';
 
 @Component({
@@ -25,7 +27,7 @@ export class ProductTabPage implements OnInit {
   loading: boolean = false;
   addingElement: boolean = false;
 
-  constructor(private http: HttpProviderService) { }
+  constructor(private http: HttpProviderService, public modalController: ModalController) { }
 
   ngOnInit() {
     this.getPage(1);
@@ -77,15 +79,17 @@ export class ProductTabPage implements OnInit {
   }
 
 
-  addElement() {
+  addElement(employee: ProductModels.IProductPost) {
     this.addingElement = true;
 
     // Esta información viene de un forms.
-    let employee: ProductModels.IProductPost = {
-      name: "Un nombre de producto",
-      isDiscontinued: false,
-      price: 1
+    /*
+    let employee: EmployeeModels.IEmployeePost = {
+      homeAddress: "Una casa",
+      name: "Un nombre",
+      familyName: "Un apellido"
     }
+    */
 
     this.http.postRequest(this.name, employee)
       .subscribe(
@@ -97,9 +101,10 @@ export class ProductTabPage implements OnInit {
             this.reloadCurrentPage();
         },
         (err) => {
-          alert("An error ocurred while adding the employee.");
-
-          console.log(err);
+          if(err.status == 409)
+            alert("One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
+          else
+            alert("An unexpected error ocurred while adding the record.");
         }
       )
       .add(
@@ -109,15 +114,17 @@ export class ProductTabPage implements OnInit {
 
 
   updateElement($event) {
-    let id = $event;
+    let employee: ProductModels.IProduct = $event;
     // Esta información vendría del formulario
-    let employee: ProductModels.IProductPut = {
-      name: "Un nombre de producto 2",
-      isDiscontinued: true,
-      price: 10
+    /*
+    let employee: EmployeeModels.IEmployeePut = {
+      homeAddress: "Casita 2",
+      name: "Nombre 2",
+      familyName: "Apellido 2"
     }
+    */
     
-    this.http.putRequest(this.name, id.toString(), employee)
+    this.http.putRequest(this.name, employee.id.toString(), employee)
       .subscribe(
         (data) => {
           alert("Successfully Modified!");
@@ -127,9 +134,9 @@ export class ProductTabPage implements OnInit {
         },
         (err) => {
           if(err.status == 409)
-            alert("One or more fields in the provided information infringe a constraint on the Data Base. Failed to Add.")
+            alert("One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.")
           else
-            alert("An unexpected error ocurred while adding the record.");
+            alert("An unexpected error ocurred while updating the data.");
         }
       );
   }
@@ -187,4 +194,28 @@ export class ProductTabPage implements OnInit {
   getNextPage() {
     this.getPage(this.nextPage);
   }
+
+  async abrirModal(editable: boolean, agregable: boolean) {
+    let myEvent = new EventEmitter();
+    myEvent.subscribe(res => {
+      console.log(res);
+      modal.dismiss();
+      this.addElement(res);
+    });
+
+    const modal = await this.modalController.create({
+      component: ProductInputPage,
+      componentProps:{
+        id: 0,
+        name: "",
+        price: "",
+        discontinued: true,
+        edit: editable,
+        agregar: agregable,
+        element: myEvent
+      }
+    });
+    return await modal.present();
+  }
+
 }

@@ -13,27 +13,36 @@
 <ion-content>
 
   <ion-item>
-    <ion-label color="primary" position="floating">ID</ion-label>
-    <ion-input [ngModel]="id"></ion-input>
+    <ion-label color="primary" position="stacked">ID</ion-label>
+    <ion-input type="string" [(ngModel)]="id" [readonly]="!edit"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label color="primary" position="floating">Nombre</ion-label>
-    <ion-input [ngModel]="contactFullName" [readonly]="!edit"></ion-input>
+    <ion-label color="primary" position="stacked">Nombre</ion-label>
+    <ion-input type="string" [(ngModel)]="contactFullName" [readonly]="!edit"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label color="primary" position="floating">Puesto</ion-label>
-    <ion-input [ngModel]="contactPosition" [readonly]="!edit"></ion-input>
+    <ion-label color="primary" position="stacked">Compañia</ion-label>
+    <ion-input type="string" [(ngModel)]="company" [readonly]="!edit"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label color="primary" position="floating">Telefono de Contacto</ion-label>
-    <ion-input [ngModel]="contactPhone" [readonly]="!edit"></ion-input>
+    <ion-label color="primary" position="stacked">Puesto</ion-label>
+    <ion-input type="string" [(ngModel)]="contactPosition" [readonly]="!edit"></ion-input>
   </ion-item>
 
-  <span *ngIf="edit">
-    <ion-button>Editar</ion-button>
+  <ion-item>
+    <ion-label color="primary" position="stacked">Telefono de Contacto</ion-label>
+    <ion-input type="string" [(ngModel)]="contactPhone" [readonly]="!edit"></ion-input>
+  </ion-item>
+
+  <span *ngIf="edit&&!agregar">
+    <ion-button (click)="updateElement()">Editar</ion-button>
+  </span>
+
+  <span *ngIf="agregar">
+    <ion-button (click)="updateElement()">Agregar</ion-button>
   </span>
 
 </ion-content>

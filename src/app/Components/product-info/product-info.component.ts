@@ -26,14 +26,24 @@ export class ProductInfoComponent implements OnInit {
   }
 
   update(id: number) {
-    this.updateEvent.emit(id);
+    this.abrirModal(true, false);
+    //this.updateEvent.emit(id);
   }
 
   toggleEditing() {
     this.editing = !this.editing;
   }
 
-  async abrirModal() {
+  async abrirModal(editable: boolean, agregable: boolean) {
+    let myEvent = new EventEmitter();
+    myEvent.subscribe(res => {
+      console.log(res);
+      this.product = res;
+      this.updateEvent.emit(this.product);
+
+      modal.dismiss();
+    });
+
     const modal = await this.modalController.create({
       component: ProductInputPage,
       componentProps:{
@@ -41,9 +51,12 @@ export class ProductInfoComponent implements OnInit {
         name: this.product.name,
         price: this.product.price,
         discontinued: this.product.isDiscontinued,
-        edit: false
+        edit: editable,
+        agregar: agregable,
+        element: myEvent
       }
     });
+
     return await modal.present();
   }
 

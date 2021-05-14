@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { IResponse } from 'src/app/Models/api-response-model';
 import CustomerModels from 'src/app/models/customer-models';
+import { CustomerInputPage } from 'src/app/pages/customer-input/customer-input.page';
 import { HttpProviderService } from 'src/app/Services/http-provider/http-provider.service';
 
 @Component({
@@ -24,7 +26,7 @@ export class CustomerTab {
   loading: boolean = false;
   addingElement: boolean = false;
 
-  constructor(private http: HttpProviderService) { }
+  constructor(private http: HttpProviderService, private modalController: ModalController) { }
 
   ngOnInit() {
     this.getPage(1);
@@ -77,17 +79,9 @@ export class CustomerTab {
   }
 
 
-  addElement() {
+  addElement(employee: CustomerModels.ICustomerPost) {
     this.addingElement = true;
 
-    // Esta información viene de un forms.
-    let employee: CustomerModels.ICustomerPost = {
-      id: "ID",
-      company: "Una compañia",
-      contactFullName: "Un nombre completo",
-      contactPosition: "Un puesto",
-      contactPhone: "0000",
-    }
 
     this.http.postRequest(this.name, employee)
       .subscribe(
@@ -112,30 +106,23 @@ export class CustomerTab {
 
 
   updateElement($event) {
-    let id = $event;
-    // Esta información vendría del formulario
-    let employee: CustomerModels.ICustomerPut = {
-      company: "Una compañia",
-      contactFullName: "Un nombre completo",
-      contactPosition: "Un puesto",
-      contactPhone: "0000",
-    }
+    let employee: CustomerModels.ICustomer = $event;
     
-    this.http.putRequest(this.name, id.toString(), employee)
-      .subscribe(
-        (data) => {
-          alert("Successfully Modified!");
+    this.http.putRequest(this.name, employee.id.toString(), employee)
+    .subscribe(
+      (data) => {
+        alert("Successfully Modified!");
 
-          // Reload the page to show the changes.
-          this.reloadCurrentPage();
-        },
-        (err) => {
-          if(err.status == 409)
-            alert("Cannot delete this element because it infringes a Constraint.")
-          else
-            alert("An unexpected error ocurred while deleting the record.");
-        }
-      );
+        // Reload the page to show the changes.
+        this.reloadCurrentPage();
+      },
+      (err) => {
+        if(err.status == 409)
+          alert("One or more fields in the modified information infringee a constraint on the Data Base.\nFailed to Modify.")
+        else
+          alert("An unexpected error ocurred while updating the data.");
+      }
+    );
   }
 
 
@@ -188,4 +175,27 @@ export class CustomerTab {
   getNextPage() {
     this.getPage(this.nextPage);
   }
+
+  async abrirModal(editable: boolean, agregable: boolean) {
+    let myEvent = new EventEmitter();
+    myEvent.subscribe(res => {
+      console.log(res);
+      modal.dismiss();
+      this.addElement(res);
+    });
+
+    const modal = await this.modalController.create({
+      component: CustomerInputPage,
+      componentProps:{
+        id: "",
+        company: "",
+        contactFullName: "",
+        edit: editable,
+        agregar: agregable,
+        element: myEvent
+      }
+    });
+    return await modal.present();
+  }
+
 }

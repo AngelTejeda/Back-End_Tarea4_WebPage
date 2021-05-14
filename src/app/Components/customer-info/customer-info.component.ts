@@ -26,24 +26,38 @@ export class CustomerInfoComponent implements OnInit {
   }
 
   update(id: string) {
-    this.updateEvent.emit(id);
+    this.abrirModal(true, false);
+    //this.updateEvent.emit(id);
   }
 
   toggleEditing() {
     this.editing = !this.editing;
   }
 
-  async abrirModal() {
+  async abrirModal(editable: boolean, agregable: boolean) {
+    let myEvent = new EventEmitter();
+    myEvent.subscribe(res => {
+      console.log(res);
+      this.customer = res;
+      this.updateEvent.emit(this.customer);
+
+      modal.dismiss();
+    });
+
     const modal = await this.modalController.create({
       component: CustomerInputPage,
       componentProps:{
         id: this.customer.id,
+        company: this.customer.company,
         contactFullName: this.customer.contactFullName,
         contactPosition: this.customer.contactPosition,
         contactPhone: this.customer.contactPhone,
-        edit: false
+        edit: editable,
+        agregar: agregable,
+        element: myEvent
       }
     });
+
     return await modal.present();
   }
 
